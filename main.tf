@@ -74,10 +74,10 @@ module "eks" {
   
   eks_managed_node_groups = {
     default = {
-      instance_types = ["t3.micro"]  //updated: anything > micro is not free tier e.g t3.medium
+      instance_types = ["t3.small"]  //updated: anything > micro is not free tier e.g t3.medium
       min_size       = 1
-      max_size       = 3
-      desired_size   = 2
+      max_size       = 1
+      desired_size   = 1
    
     }
   }

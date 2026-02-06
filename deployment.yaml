@@ -1,0 +1,58 @@
+#######DEPLOYMENT.YAML#########
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: insta-devops
+  namespace: default          # <-- added
+  labels:
+    app: insta-devops
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: insta-devops
+  template:
+    metadata:
+      labels:
+        app: insta-devops
+    spec:
+      containers:
+      - name: flask
+        image: hojekunle/insta-devops-repo:2026-01-21-201650 #match image name in DH
+
+        ports:
+        - containerPort: 5000 #container port
+        #set minute resources so free-tier can handle it
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+
+
+
+
+---
+
+
+
+##########SERVICE.YAML#########
+apiVersion: v1
+kind: Service
+metadata:
+  name: insta-devops-service
+  namespace: default
+  labels:
+    app: insta-devops
+    release: prometheus
+spec:
+  selector:
+    app: insta-devops
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80 #service port
+      targetPort: 5000 #container port
+  type: ClusterIP
